@@ -7,8 +7,9 @@ import { selectRefreshToken } from '../store/selectors/userSelectors';
 import Components from './Components';
 import NotFoundPage from './NotFoundPage';
 import EditPage from './pages/edit/EditPage';
+import HomePage from './pages/home/HomePage';
 
-const HomePage = () => {
+const LayoutPage = () => {
   const refreshToken = useSelector(selectRefreshToken);
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const HomePage = () => {
   return refreshToken ? (
     // <Container>
     <Routes>
+      <Route path="/" element={<HomePage />} />
       <Route path="edit/:type" element={<EditPage />} />
       <Route path="components/*" element={<Components />} />
       <Route path="test" element={<Test />} />
@@ -32,4 +34,4 @@ const HomePage = () => {
     <Loading />
   );
 };
-export default HomePage;
+export default LayoutPage;

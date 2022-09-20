@@ -1,9 +1,12 @@
+import classNames from 'classnames';
 import { Form } from 'react-bootstrap';
 import styled from 'styled-components';
+import { useState } from 'react';
 //styledComponents
 const FormGroup = styled(Form.Group)`
   display: flex;
   flex-direction: column;
+  justify-content: center;
 `;
 
 const FormLabel = styled(Form.Label)`
@@ -15,25 +18,27 @@ const FormText = styled(Form.Text)`
   display: inline-block;
 `;
 // /styledComponents
-const TextInputControled = ({
-  onChange,
-  value,
-  label,
-  placeholder,
-  parentClass,
-  helpText,
-}) => {
+const TextInputControlled = ({
+                               onChange,
+                               value,
+                               label,
+                               placeholder,
+                               helpText,
+                               type,
+                             }) => {
+
   return (
-    <FormGroup className="mb-3">
-      <FormLabel>{label}</FormLabel>
+    <FormGroup>
+      {label ? <FormLabel>{label}</FormLabel> : null}
       <Form.Control
-        type="text"
+        type={type || 'text'}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
       />
-      <FormText>{helpText}</FormText>
+
+      {helpText === '' ? <FormText>{helpText}</FormText> : null}
     </FormGroup>
   );
 };
-export default TextInputControled;
+export default TextInputControlled;

@@ -9,7 +9,7 @@ const initialState = {
   image: null,
 };
 
-const userSlice = createSlice({
+const userAuthSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
@@ -29,7 +29,7 @@ const userSlice = createSlice({
     removeUser(state) {
       state.email = null;
       state.error = null;
-      state.refresh_token = null;
+      state.refresh_token = '';
       state.uuid = null;
       state.lastName = null;
       state.firstName = null;
@@ -41,9 +41,7 @@ const userSlice = createSlice({
   },
 });
 
-export const selectUser = ({ user }) => user;
-export const authStatus = ({ user: { refresh_token } }) => !!refresh_token;
-
 export const { setUser, removeUser, setError, setUserImage } =
-  userSlice.actions;
-export default userSlice.reducer;
+  userAuthSlice.actions;
+
+export default userAuthSlice.reducer;

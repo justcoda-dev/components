@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { category } from "../controllers/category.controller.js";
+import { cart } from "../controllers/cart.controller.js";
 
-export const categoryRouter = new Router();
+export const cartRouter = new Router();
 
-categoryRouter.get("/list?:limit?:page", category.getCategoryList);
-categoryRouter.get("/:id", category.getOneCategory);
-categoryRouter.post("", category.createCategory);
-categoryRouter.patch("/:id", category.updateCategory);
-categoryRouter.delete("/:id", category.deleteCategory);
+cartRouter.get("/list?:limit?:page", cart.getCartList);
+cartRouter.get("/list/select", cart.getCartListSelect);
+cartRouter.get("/:id", cart.getOneCart);
+cartRouter.post("create", cart.createCart);
+cartRouter.patch("/:id", cart.updateCart);
+cartRouter.delete("/:id", cart.deleteCart);

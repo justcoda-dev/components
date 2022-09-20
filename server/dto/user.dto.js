@@ -1,4 +1,4 @@
-export const userLoginDto = ({
+export const userDto = ({
   uuid,
   firstname,
   lastname,

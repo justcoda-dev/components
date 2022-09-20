@@ -1,15 +1,20 @@
-import db from "../dataBase.js"
-import {DataTypes} from "sequelize"
+import { DataTypes } from "sequelize";
+import db from "../dataBase.js";
 
-const Role = db.define('role', {
-    id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        primaryKey: true
+export const Role = db.define(
+  "role",
+  {
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false,
     },
     role: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {})
+      type: DataTypes.STRING,
+      allowNull: false,
+      comment: "role by userApi",
+    },
+  },
+  {}
+);

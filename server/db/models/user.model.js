@@ -1,32 +1,60 @@
-import db from "../dataBase.js"
-import {DataTypes} from "sequelize"
+import { DataTypes } from "sequelize";
+import db from "../dataBase.js";
+import { Cart } from "./cart.model.js";
+import { Role } from "./role.model.js";
+import { Token } from "./token.model.js";
 
-
-const Superhero = db.define('superhero', {
-    nickname: {
-        type: DataTypes.STRING(100),
-        allowNull: false
+export const User = db.define(
+  "user",
+  {
+    uuid: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      allowNull: false,
     },
-    real_name: {
-        type: DataTypes.STRING,
-        allowNull: false
+    is_activated: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
     },
-    origin_description: {
-        type: DataTypes.TEXT,
-        allowNull: false
+    activation_link: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    superpowers: {
-        type: DataTypes.TEXT,
-        allowNull: false
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    catch_phrase: {
-        type: DataTypes.STRING,
-        allowNull: false
+    firstname: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    images: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
-        allowNull: true
-    }
-
-}, {});
-export default Superhero
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    ip: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  },
+  {}
+);
+// cart
+User.hasOne(Cart);
+Cart.belongsTo(User);
+// role
+User.hasOne(Role);
+Role.belongsTo(User);
+// token
+User.hasOne(Token);
+Token.belongsTo(User);

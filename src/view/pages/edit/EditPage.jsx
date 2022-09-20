@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,9 +8,10 @@ import Loading from '../../../components/UI/Loading/Loading';
 import {
   editAllPages,
   editList,
-  editListPagesCount,
+  editListPagesCount, editSelectList, editType,
 } from '../../../store/selectors/editSelectors';
-import { getUsersEditAsync } from '../../../store/thunks/EditThunk';
+import { createItem, getList } from '../../../store/thunks/editThunk';
+import { setType } from '../../../store/slices/editSlice';
 
 // styled components
 const EditPageWrapper = styled.div`
@@ -21,14 +22,33 @@ const EditPageWrapper = styled.div`
 `;
 
 // /styled components
-const listTypes = {
-  user: getUsersEditAsync,
-  product: getUsersEditAsync,
-  role: getUsersEditAsync,
-  s: getUsersEditAsync,
+const editPage = {
+  product: [
+    {
+      id: 1,
+      component: 'input',
+      props: {
+        type: 'text',
+        title: 'name',
+        onChange: ({ target: { value } }) => console.log(value),
+        //  события додавати  по ходу
+      },
+    },
+    {
+      id: 2,
+      component: 'select',
+      props: {
+        type: 'text',
+        title: 'category',
+        onChange: ({ target: { value } }) => console.log(value),
+        listWithOptions:[]
+      },
+    },
+  ],
 };
-
-const UsersEdit = () => {
+const filterKeysArr = ['uuid'];
+const EditPage = () => {
+  // state
   const list = useSelector(editList);
   const pagesCount = useSelector(editListPagesCount);
   const lastPage = useSelector(editAllPages);
@@ -38,7 +58,9 @@ const UsersEdit = () => {
   const navigate = useNavigate();
 
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [createItem, setCreateItem] = useState({});
+  // /state
+  // variables
   const queryParams = useMemo(
     () => Object.fromEntries([...searchParams]),
     [searchParams],
@@ -47,12 +69,16 @@ const UsersEdit = () => {
     () => parseInt(queryParams.page),
     [queryParams],
   );
-
+  const type = useMemo(
+    () => location.pathname.split('/').filter((item) => item !== '')[1],
+    [location],
+  );
   const totalPagesArr = useMemo(
     () => Array.from({ length: lastPage }, (_, i) => i + 1),
     [lastPage],
   );
-
+  // /variables
+  // events
   const setPage = useCallback(
     (page) => setSearchParams({ ...queryParams, page }),
     [queryParams],
@@ -70,6 +96,15 @@ const UsersEdit = () => {
     [queryParams, list, pagesCount, lastPage],
   );
 
+  const createSaveHandler = useCallback(
+    (item) => {
+      console.log(item);
+      if (type.length) {
+        dispatch(createItem({ item, ...queryParams, type }));
+      }
+    },
+    [queryParams, type],
+  );
   const lastPageHandler = useCallback(
     () =>
       setSearchParams({
@@ -102,29 +137,35 @@ const UsersEdit = () => {
     });
   }, [queryParams, queryParamsPage, lastPage]);
 
-  const getList = useCallback(() => {
-    const pathKeys = location.pathname.split('/').filter((item) => item !== '');
-    const type = pathKeys[1];
-    if (listTypes[type]) {
-      dispatch(listTypes[type](queryParams));
+  const getListCb = useCallback(() => {
+    if (type.length) {
+      dispatch(getList({ type, ...queryParams }));
     } else {
-      navigate('/');
+      navigate('not found');
     }
   }, [queryParams]);
-
+  // /events
+  // effects
   useEffect(() => {
+    dispatch(setType({ type }));
     if (Object.keys(queryParams).length) {
-      getList();
+      getListCb();
     } else {
       setSearchParams({ limit: 5, page: 1 });
     }
-  }, [queryParams]);
+  }, [queryParams, type]);
 
+  // /effects
   return (
     <>
       {list ? (
         <EditPageWrapper>
-          <EditList arrList={list} />
+          <EditList
+            filterKeysArr={filterKeysArr}
+            onCreateSave={createSaveHandler}
+            arrList={list}
+            createItemList={editPage[type]}
+          />
           <PaginationSelf
             onFirstClick={firstPageHandler}
             onLastClick={lastPageHandler}
@@ -142,4 +183,4 @@ const UsersEdit = () => {
     </>
   );
 };
-export default UsersEdit;
+export default EditPage;

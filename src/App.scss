@@ -1,5 +1,18 @@
+/* The following block can be included in a custom.scss */
+
+/* make the customizations */
+//$theme-colors: (
+//        "info": tomato,
+//        "danger": teal
+//);
+
+/* import bootstrap to set changes */
+@import '~bootstrap/scss/bootstrap';
+/* The following line can be included in a src/App.scss */
+
 .App {
   text-align: center;
+  height: 100vh;
 }
 
 .App-logo {
@@ -27,6 +40,7 @@
 .App-link {
   color: #61dafb;
 }
+
 
 @keyframes App-logo-spin {
   from {

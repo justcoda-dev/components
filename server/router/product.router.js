@@ -1,10 +1,12 @@
-import { Router } from 'express';
-import { category } from '../controllers/category.controller.js';
+import {Router} from "express";
+import {product} from "../controllers/product.controller.js";
 
-export const categoryRouter = new Router();
+export const productRouter = new Router();
 
-categoryRouter.get('/list', category.getCategoryList);
-categoryRouter.get('/:id', category.getOneCategory);
-categoryRouter.post('/', category.createCategory);
-categoryRouter.patch('/:id', category.updateCategory);
-categoryRouter.delete('/:id', category.deleteCategory);
+productRouter.get("/list?:limit?:page", product.getProductList);
+productRouter.get("/:id", product.getOneProduct);
+productRouter.post("/create", product.createProduct);
+productRouter.patch("/:id", product.updateProduct);
+productRouter.post("/image/:id", product.uploadProductImage);
+productRouter.delete("/image/:id", product.deleteProductImage);
+productRouter.delete("/:id", product.deleteProduct);
